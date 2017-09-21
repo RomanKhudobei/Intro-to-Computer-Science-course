@@ -1,6 +1,6 @@
 import re
 
-#Example input
+# Example input
 cache = {
    'http://udacity.com/cs101x/urank/index.html': 
 """
