@@ -205,7 +205,7 @@ def add_to_index(index, keyword, url):
         index[keyword] = [url]
 
 def ordered_search(index, ranks, keyword):
-
+    '''Search request. Returns list of urls, sorted by rate, for given keyword.'''
     tosort_list = index.get(keyword, None)
     if not tosort_list:
         return None
