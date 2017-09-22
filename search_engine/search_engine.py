@@ -103,14 +103,44 @@ Hummus Recipe
 """ 
 }
 
-'''
+"""
 cache - example input
 index - dictionary type {'keyword': ['urls' where it appears]} and needed for respond search requests
 graph - dictionary type {'url': [list of pages it links to]} and needed for calculate rank for each url
 ranks - dictionary type {'url': rate} needed for prioritize pages on respond request
-'''
 
-def compute_ranks(graph):
+About reciprocal links:
+Pages can collaborate with each other to improve their page ranks.
+The link A->B is reciprocal (where A and B are urls) when there is a path (through links) from B to A (B->A)
+the lenght of which equal to or below the "collusion" level, k. In other words, k is number of "how far you want to search".
+"""
+
+def is_reciprocal(page, node, graph, k):    # k - is a number of 'how far you want to search'
+    '''Returns boolean type, depended on whether link is reciprocal.'''
+    if page == node:
+        return True
+    if k > 0:
+        if node in graph[page]:
+            return True
+        if k > 1:
+            i = 1   # to keep track of how 'far' we are searching
+            to_check = [] + graph[page]
+            next_level = []
+            while to_check and i < k:
+                url = to_check.pop()
+                if node in graph[url]:
+                    return True
+                next_level = next_level + graph[url]
+                if not to_check:
+                    if i < k:
+                        to_check, next_level = next_level, []
+                        i = i + 1
+        else:
+            return False
+    else:
+        return False
+
+def compute_ranks(graph, k):
     '''Takes as input graph and returns ranks dictionary.'''
     d = 0.8     # damping factor (probability that user might leave a page)
     numloops = 10   # for more accurate value of rating
@@ -121,10 +151,13 @@ def compute_ranks(graph):
     for i in range(0, numloops):
         newranks = {}
         for page in graph:
-            newrank = ((1 - d) / npages) 
+            newrank = ((1 - d) / npages)    # default rate for each page
             for node in graph:
                 if page in graph[node]:
-                    newrank = newrank + d * ranks[node] / len(graph[node])
+                    if is_reciprocal(page, node, graph, k):     # if link is reciprocal, then don't include it to compute page rate
+                        continue
+                    else:
+                        newrank = newrank + d * (ranks[node]/len(graph[node]))
             newranks[page] = newrank
         ranks = newranks
     return ranks
