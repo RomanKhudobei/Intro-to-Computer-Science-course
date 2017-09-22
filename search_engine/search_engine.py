@@ -236,10 +236,8 @@ def add_page_to_index(index, url, content):
 
 def ordered_search(index, ranks, keyword):
     '''Search request. Returns list of urls, sorted by rate, for given keyword.'''
-    tosort_list = index.get(keyword, None)
-    if not tosort_list:
-        return None
-    return sorted(tosort_list, key=lambda url: ranks[url], reverse=True)
+    tosort_list = index.get(keyword, [])
+    return sorted(tosort_list, key=lambda url: ranks[url], reverse=True)    # sort by rate of page (from high to low)
 
 
 index, graph = crawl_web('http://udacity.com/cs101x/urank/index.html')
