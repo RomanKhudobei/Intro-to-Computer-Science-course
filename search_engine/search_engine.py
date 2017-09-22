@@ -223,18 +223,16 @@ def formatize_word(word):
     return formatted_word
 
 def add_page_to_index(index, url, content):
-    '''Adds all words from content (content from page) to index'''
+    '''Adds all words from content (text from page) to index.'''
     words = content.split()
     for i in range(0, len(words)):
         words[i] = formatize_word(words[i])
-        add_to_index(index, words[i], url)
-        
-def add_to_index(index, keyword, url):
-    '''Helper procedure for add_page_to_index that exactly adds words to index'''
-    if keyword in index and keyword != '':    # because if keyword == '', then it was a html-tag
-        index[keyword].append(url)
-    else:
-        index[keyword] = [url]
+        keyword = words[i]
+        if keyword in index and keyword != '':    # because if keyword == '', then it was a html-tag
+            index[keyword].append(url)
+        else:
+            if keyword != '':      # to avoid any empty strings ('') in index
+                index[keyword] = [url]
 
 def ordered_search(index, ranks, keyword):
     '''Search request. Returns list of urls, sorted by rate, for given keyword.'''
@@ -245,4 +243,4 @@ def ordered_search(index, ranks, keyword):
 
 
 index, graph = crawl_web('http://udacity.com/cs101x/urank/index.html')
-ranks = compute_ranks(graph)
+ranks = compute_ranks(graph, 3)
