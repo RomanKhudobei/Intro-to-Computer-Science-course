@@ -46,3 +46,18 @@ Task:
    
 	The procedure should be able to handle an empty string (the string '') as input, in
 	which case it should return a network with no users.
+	
+	
+
+I choose the next data structure to store information:
+
+network = {'user_name1': [
+                [list of connections],
+                [list of liked games]
+           ],
+           'user_name2': [
+                [list of connections],
+                [list of liked games]
+           ],
+    ...
+}
