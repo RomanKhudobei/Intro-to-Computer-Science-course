@@ -22,21 +22,6 @@ Robin likes to play Call of Arms, Dwarves and Swords.\
 Freda is connected to Olive, John, Debra.\
 Freda likes to play Starfleet Commander, Ninja Hamsters, Seahorse Adventures."
 
-"""
-I choose the next data structure to store information:
-
-network = {'user_name1': [
-                [list of connections],
-                [list of liked games]
-           ],
-           'user_name2': [
-                [list of connections],
-                [list of liked games]
-           ],
-    ...
-}
-"""
-
 def create_data_structure(string_input):
 	'''Parses a block of text and stores relevant information into a data structure.
 
